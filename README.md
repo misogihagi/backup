@@ -182,3 +182,69 @@ Blu-rayは、その**長期保存性**と**物理的な独立性**という特�
 HDDやクラウドサービスといった他のバックアップ方法と組み合わせることで、**「HDDには直近のデータを、Blu-rayには長期保存したいデータを」**といった形で、より強固なデータ保護体制を構築することができます。
 
 デジタル化が進む現代において、物理的なバックアップの重要性は増しています。この機会に、Blu-rayを活用したバックアップ戦略を検討してみてはいかがでしょうか。
+
+---
+
+## バックアップ提案 MCP サーバー (backup-advisor-mcp)
+
+AIアシスタント（Antigravity, Claude, Cursor, VS Codeなど）が「どのようなバックアップを行えばよいか」を自動診断し、具体戦略・必要メディア数・即実行可能なコマンドラインを提案する **Model Context Protocol (MCP) サーバー** が本リポジトリに同梱されています。
+
+### 主な機能と提供ツール (MCP Tools)
+
+1. `analyze_backup_target`
+   - 指定したローカルパス（またはディレクトリ）を解析し、総容量、ファイル数、ファイル種別内訳（写真・動画、文書、コード、DB等）、推定圧縮率を算出します。
+2. `propose_backup_strategy`
+   - データ種別・容量・重要度・更新頻度・予算感から、**3-2-1ルール（ローカル＋クラウド＋Blu-ray/M-DISCエアギャップ）**に基づいた階層別バックアップ計画を自動作成します。
+3. `calculate_backup_media`
+   - 必要なBlu-rayディスク枚数（BD-R 25GB/50GB/100GB/128GB）、7z分割サイズ（`-v4095m`）、外付けHDD推奨容量、クラウド（S3 Glacier / Backblaze B2）月額費用を精密試算します。
+4. `generate_backup_commands`
+   - お使いのOS（Linux / macOS / Windows）に応じた7z圧縮、ハッシュ計算、mkisofs、growisofs、rclone、resticなどの具体的な実行用シェルスクリプトを生成します。
+5. `audit_backup_compliance`
+   - 現在のバックアップ運用が3-2-1ルール適合率、ランサムウェア耐性（エアギャップ）、ビットロット対策を満たしているかをスコア（S〜Fランク）診断します。
+
+### MCP 設定例 (`mcp_config.json`)
+
+Antigravity や Claude Desktop の `mcp_config.json` に以下のように設定することで、AIとの会話中に自動的にツール呼び出しが利用可能になります。
+
+```json
+{
+  "mcpServers": {
+    "backup-advisor": {
+      "command": "bun",
+      "args": [
+        "run",
+        "/home/user/Documents/GitHub/backup/src/index.ts"
+      ]
+    }
+  }
+}
+```
+
+または、ビルド済みの JavaScript を直接起動する場合:
+
+```json
+{
+  "mcpServers": {
+    "backup-advisor": {
+      "command": "node",
+      "args": [
+        "/home/user/Documents/GitHub/backup/dist/index.js"
+      ]
+    }
+  }
+}
+```
+
+### 起動とテスト
+
+```bash
+# 依存関係のインストール
+bun install
+
+# ビルド
+bun run build
+
+# 単体テスト (JSON-RPC stdio 応答テスト)
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0"}}}' | bun run src/index.ts
+```
+
