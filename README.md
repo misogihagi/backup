@@ -112,7 +112,7 @@ Blu-rayでの具体的なバックアップ手順は、主に**準備**、**書�
 このとき確認用のハッシュリストも作っておきます。
 
 ```bash
-shasum backup.part* > backup.hashlist
+shasum archive.* > archive.hashlist
 ```
 
 #### 2. ISOイメージファイルの作成
@@ -120,7 +120,7 @@ shasum backup.part* > backup.hashlist
 次に、mkisofsコマンドを使って、アーカイブファイルから書き込み用のISOイメージファイルを作成します。
 
 ```bash
-mkisofs -V "backup" -J -r -o backup.iso backup.*
+mkisofs -V "backup" -J -r -o archive.iso archive.*
 ``
 
 #### 3. Blu-rayディスクをドライブに挿入
