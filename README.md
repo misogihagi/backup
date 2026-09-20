@@ -117,6 +117,27 @@ par2 verify archive.par2
 shasum archive.* > archive.hashlist
 ```
 
+書き込み時。ファイルが容量的に収まさりきらないと、エラーになります。
+
+> $ growisofs -dvd-compat -Z /dev/sr0=archive.iso
+> Executing 'builtin_dd if=archive.iso of=/dev/sr0 obs=32k seek=0'
+> :-( /dev/sr0: 12219392 blocks are free, 12231003 to be written!
+
+12,219,392ブロックは、**約25.01 GB（ギガバイト）**、正確には **25,024,316,416 バイト** です。
+これは、一般的な1層式Blu-ray（片面1層・25GB）の最大記録容量（限界値）です。
+これを超えないようにスクリプトでチェックしてください。
+
+```bash
+check_bd.sh archive.*
+```
+
+##### 参考：計算の内訳
+
+* 光学メディア（DVDやBlu-ray）の1ブロックは **2,048 バイト**
+* $12,219,392 \times 2,048 = 25,024,316,416$ バイト
+* メガバイト (MB) 換算: 約 23,865.25 MB
+* ギガバイト (GB) 換算: 約 23.3 GB（1024進数）または **約 25.0 GB**（1000進数）
+
 #### 2. ISOイメージファイルの作成
 
 次に、mkisofsコマンドを使って、アーカイブファイルから書き込み用のISOイメージファイルを作成します。
