@@ -123,7 +123,7 @@ shasum archive.* > archive.hashlist
 
 ```bash
 mkisofs -V "backup" -J -r -o archive.iso archive.*
-``
+```
 
 #### 3. Blu-rayディスクをドライブに挿入
 
