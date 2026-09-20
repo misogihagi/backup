@@ -106,7 +106,9 @@ Blu-rayでの具体的なバックアップ手順は、主に**準備**、**書�
 バックアップしたいファイルをまとめるために、`7z`コマンドを使って1つのアーカイブファイルを作成します。このときどのようなファイルシステムを使うかわからないのでFAT32でも大丈夫なように最大で`4GiB-1`になるよう分割します。
 
 ```bash
-7z a -mx9 -mrr5% archive.7z backup_folder -v4095m # 4GB(4096MB)より低くする
+7z a -mx9 archive.7z backup_folder -v4095m # 4GB(4096MB)より低くする
+par2 create -r5 archive.par2 archive.*
+par2 verify archive.par2
 ```
 
 このとき確認用のハッシュリストも作っておきます。
