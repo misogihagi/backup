@@ -63,9 +63,9 @@ fi
 
 # 記録可能ブロック数の取得 (Free Blocksなど)
 # 簡易的に growisofs のエミュレーション機能(-M /dev/sr0=/dev/null などは使えないため、dvd+rw-mediainfoのFree blocksを使用)
-free_blocks=$(echo "$media_info" | grep -i "Free Blocks" | awk '{print $3}')
+free_blocks=$(echo "$media_info" | grep -i "Free Blocks" | awk '{print $3}' | cut -d'*' -f1)
 
-if [ -z "$FREE_BLOCKS" ]; then
+if [ -z "$free_blocks" ]; then
   # ドライブやメディアによって表示が違う場合のフォールバック（追記型か、新品BD-R/REかなど）
   # 25GBのBDの場合の概算値(約12219392ブロック等)をスニペットにするか、エラーとする
   echo "Warning: 正確な空きブロック数が取得できなかったため、メディアの最大容量から判定します。"
