@@ -143,7 +143,7 @@ check_bd.sh archive.*
 次に、mkisofsコマンドを使って、アーカイブファイルから書き込み用のISOイメージファイルを作成します。
 
 ```bash
-mkisofs -V "backup" -J -r -o archive.iso archive.*
+mkisofs -V "backup" -J -r -o archive.iso archive.* restore.txt
 ```
 
 #### 3. Blu-rayディスクをドライブに挿入
@@ -156,7 +156,7 @@ mkisofs -V "backup" -J -r -o archive.iso archive.*
 最後に、growisofsコマンドを使ってISOイメージをBlu-rayディスクに書き込みます。このコマンドは、書き込みとベリファイ（データ検証）を同時に行うことができます。
 
 ```bash
-growisofs -dvd-compat -Z /dev/sr0=backup.iso
+growisofs -dvd-compat -Z /dev/sr0=archive.iso
 ```
 
 * -Z : 新しいセッションを開始し、ISOイメージを書き込みます。
